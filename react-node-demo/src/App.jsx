@@ -9,9 +9,8 @@ function App() {
   })
   const [loading, setLoading] = useState(false)
 
-  const API_BASE_URL = window.location.hostname === 'localhost'
-    ? 'http://localhost:3001'
-    : `http://${window.location.hostname}:3001`
+  // Use same origin for API calls (NGINX will proxy to backend)
+  const API_BASE_URL = window.location.origin
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -58,9 +57,9 @@ function App() {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Name:</label>
-          <input 
-            type="text" 
-            name="name" 
+          <input
+            type="text"
+            name="name"
             value={formData.name}
             onChange={handleChange}
             required
@@ -68,9 +67,9 @@ function App() {
         </div>
         <div className="form-group">
           <label>Email:</label>
-          <input 
-            type="email" 
-            name="email" 
+          <input
+            type="email"
+            name="email"
             value={formData.email}
             onChange={handleChange}
             required
@@ -78,34 +77,34 @@ function App() {
         </div>
         <div className="form-group">
           <label>Message:</label>
-          <textarea 
-            name="message" 
+          <textarea
+            name="message"
             value={formData.message}
             onChange={handleChange}
             required
           />
         </div>
-        
+
         <div className="button-group">
           <button type="submit" disabled={loading}>
             {loading ? 'Processing...' : 'Submit (Success Path)'}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={() => callApi('error-nodeA')}
             disabled={loading}
           >
             {loading ? 'Processing...' : 'Fail at Node A'}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={() => callApi('error-nodeB')}
             disabled={loading}
           >
             {loading ? 'Processing...' : 'Fail at Node B'}
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={() => callApi('error-db')}
             disabled={loading}
           >
