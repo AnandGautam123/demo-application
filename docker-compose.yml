@@ -1,0 +1,47 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3007:3000"
+    environment:
+      - NODE_ENV=production
+      - OTEL_SERVICE_NAME=react-frontend
+      - OTEL_EXPORTER_OTLP_ENDPOINT=https://common-tempo-staging.thewitslab.com
+    depends_on:
+      - node-a
+    networks:
+      - app-network
+
+  node-a:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3009:3001"
+    environment:
+      - NODE_ENV=production
+      - OTEL_SERVICE_NAME=node-a
+      - OTEL_EXPORTER_OTLP_ENDPOINT=https://common-tempo-staging.thewitslab.com
+    depends_on:
+      - node-b
+    networks:
+      - app-network
+
+  node-b:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.nodeb
+    ports:
+      - "3005:3002"
+    environment:
+      - NODE_ENV=production
+      - OTEL_SERVICE_NAME=node-b
+      - OTEL_EXPORTER_OTLP_ENDPOINT=https://common-tempo-staging.thewitslab.com
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
